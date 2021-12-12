@@ -20,11 +20,12 @@ Tank game similar to the Wii tank game coded in Javascript for a university proj
 - Ennemies AI.
 - Implement different type of ennemies
 - Implements different levels
+- Menu and Highscores
 - Level editor
 - Mines
 
 **OPTIONAL**
 
-- Menu and Highscores
 - Player vs Player option
 - Battle Royal
+- Air dropping bonuses
