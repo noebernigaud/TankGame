@@ -2,10 +2,14 @@ import Char from './char.js';
 import { getMousePos } from './utils.js'
 import Wall from './wall.js';
 export { walls };
+export { bullets };
 
 var canvas, ctx, width, height;
 var char1;
+var charsAI;
+var chars;
 var walls;
+var bullets;
 var mousepos = { x: 0, y: 0 };
 var inputStates = {};
 
@@ -20,6 +24,10 @@ function init() {
     // dernier param = temps min entre tirs consecutifs. Mettre à 0 pour cadence max
     // 500 = 2 tirs max par seconde, 100 = 10 tirs/seconde
     char1 = new Char(100, 100, 0, 1, 1000);
+    charsAI = [];
+    chars = [char1];
+
+    bullets = new Array();
 
     walls = new Array(
         new Wall(0, 0, width, 30, false),
@@ -90,6 +98,9 @@ function anime() {
     // 2) On dessine et on déplace le char 1
     char1.draw(ctx);
     char1.updateAngle(mousepos);
+
+    // On dessine chaque balle
+    bullets.forEach(bullet => bullet.draw(ctx));
 
     // On regarde si on doit tirer
     if (inputStates.SPACE) {

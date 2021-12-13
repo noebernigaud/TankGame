@@ -1,5 +1,6 @@
 import { distance } from './utils.js'
 import Bullet from './bullet.js';
+import { bullets } from './game.js';
 
 export default class Char {
     constructor(x, y, angle, vitesse, tempsMinEntreTirsEnMillisecondes) {
@@ -7,7 +8,7 @@ export default class Char {
       this.y = y;
       this.angle = angle;
       this.v = vitesse;
-      this.bullets = [];
+      //this.bullets = [];
       // cadenceTir en millisecondes = temps min entre tirs
       this.delayMinBetweenBullets = tempsMinEntreTirsEnMillisecondes;
     }
@@ -27,12 +28,12 @@ export default class Char {
       
       ctx.restore();
       
-      this.drawBullets(ctx);
+      //this.drawBullets(ctx);
   
     }
     
     // width et height pour donner la limite à partir desquelles les balles devront disparaitre
-    drawBullets(ctx, width, height) {
+    /*drawBullets(ctx, width, height) {
       for(let i = 0; i < this.bullets.length; i++) {
         let b = this.bullets[i];
         b.draw(ctx);
@@ -44,7 +45,7 @@ export default class Char {
         }
   
       }
-    }
+    }*/
 
     move(speedX, speedY){
       //deplace le tank
@@ -69,15 +70,15 @@ export default class Char {
        }
        
        if((this.lastBulletTime === undefined) || (tempEcoule> this.delayMinBetweenBullets)) {
-          this.bullets.push(new Bullet(this, 1, 8));
+          bullets.push(new Bullet(this, 1, 8));
           // on mémorise le dernier temps.
           this.lastBulletTime = time;
        }
      }
   
-     removeBullet(bullet) {
+     /*removeBullet(bullet) {
           let position = this.bullets.indexOf(bullet);
           this.bullets.splice(position, 1);
-      }
+      }*/
   }
   
