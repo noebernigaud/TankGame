@@ -1,12 +1,14 @@
 import Wall from './wall.js';
-import { walls, bullets } from './game.js';
-import { collR, collL, collB, collT } from './utils.js';
+import { walls, bullets, chars } from './game.js';
+import { collR, collL, collB, collT, coll } from './utils.js';
 
 export default class Bullet {
     constructor(char, live, speed) {
-        this.x = char.x;
-        this.y = char.y;
         this.angle = char.angle;
+        this.x = char.x;
+        this.x -= 40 * Math.cos(this.angle);
+        this.y = char.y;
+        this.y -= 40 * Math.sin(this.angle);
         this.live = live;
         this.speed = speed;
     }
@@ -59,9 +61,20 @@ export default class Bullet {
         }
 
         //FONCTIONS DE COLLISIONS ENTRE BALLES
-        
+        bullets.forEach( bullet => {
+            if (coll(this.x - 5, this.y - 5, 10, 10, bullet.x - 5, bullet.y - 5, 10, 10)){
+                bullet.removeBullet();
+                this.removeBullet();
+            }}
+        );
 
         //FONCTONS DE COLLISIONS AVEC UN CHAR
+        chars.forEach( char => {
+            if (coll(this.x - 5, this.y - 5, 10, 10, char.x - 20, char.y - 20, 40, 40)){
+                char.removeChar();
+                this.removeBullet();
+            }}
+        );
         
 
         // LA BALLE AVANCE DE SE VITESSE DANS SA DIRECTION DONNEE PAR L'ANGLE
@@ -69,7 +82,7 @@ export default class Bullet {
         this.y -= this.speed * Math.sin(this.angle);
     }
 
-    removeBullet(bullet) {
+    removeBullet() {
         let position = bullets.indexOf(this);
         bullets.splice(position, 1);
     }

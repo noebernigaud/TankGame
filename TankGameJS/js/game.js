@@ -1,19 +1,24 @@
 import Char from './char.js';
+import Hole from './hole.js';
 import { getMousePos } from './utils.js'
 import Wall from './wall.js';
-export { walls };
-export { bullets };
+export { walls, holes, bullets, chars, charsAI, char1, stopgame };
 
 var canvas, ctx, width, height;
 var char1;
 var charsAI;
+var charAI;
 var chars;
 var walls;
+var holes;
 var bullets;
 var mousepos = { x: 0, y: 0 };
 var inputStates = {};
+var playing;
 
 window.onload = init;
+
+// INITIALISATION
 
 function init() {
     canvas = document.querySelector("#myCanvas");
@@ -21,8 +26,8 @@ function init() {
     width = canvas.width;
     height = canvas.height;
 
-    // dernier param = temps min entre tirs consecutifs. Mettre à 0 pour cadence max
-    // 500 = 2 tirs max par seconde, 100 = 10 tirs/seconde
+    playing = 0;
+
     char1 = new Char(100, 100, 0, 1, 1000);
     charsAI = [];
     chars = [char1];
@@ -34,7 +39,7 @@ function init() {
         new Wall(0, 0, 30, height, false),
         new Wall(0, height - 30, width, 30, false),
         new Wall(width - 30, 0, 30, height, false),
-        new Wall(width/2, height/2, 30, 100, false)
+        new Wall(width / 2, height / 2, 30, 100, false)
     );
 
     canvas.addEventListener('mousemove', (evt) => {
@@ -88,53 +93,90 @@ function init() {
     anime();
 }
 
+//GAME OVER GO TO MENU
+
+function stopgame(){
+    playing = 0;
+}
+
+//DEBUT D'UNE NOUVELLE PARTIE
+
+function startgame(){
+    char1 = new Char(100, 100, 0, 1, 1000);
+    charAI = new Char(500, 200, 0, 1, 1000);
+    charsAI = [charAI];
+    chars = [char1, charAI];
+
+    bullets = new Array();
+
+    walls = new Array(
+        new Wall(0, 0, width, 30, false),
+        new Wall(0, 0, 30, height, false),
+        new Wall(0, height - 30, width, 30, false),
+        new Wall(width - 30, 0, 30, height, false),
+        new Wall(width / 2, height / 2, 30, 100, false)
+    );
+
+    holes = new Array(
+        new Hole(300, 300)
+    );
+
+    playing = 1;
+}
+
+//ANIMATION
+
 function anime() {
-    // 1) On efface l'Ã©cran
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    //On dessine les murs
-    walls.forEach(wall => wall.draw(ctx));
-
-    // 2) On dessine et on déplace le char 1
-    char1.draw(ctx);
-    char1.updateAngle(mousepos);
-
-    // On dessine chaque balle
-    bullets.forEach(bullet => bullet.draw(ctx));
-
-    // On regarde si on doit tirer
-    if (inputStates.SPACE) {
-        char1.addBullet(Date.now(), width, height);
-    }
-    if (inputStates.mouseclick) {
-        char1.addBullet(Date.now(), width, height);
+    //MENU
+    if (playing == 0) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = "30px Arial";
+        ctx.fillText('Press Space to start', 200, 300);
+        if (inputStates.SPACE) {
+            startgame();
+            inputStates.SPACE = false; }
     }
 
-    var coeff = 1;
-    if (inputStates.keyA + inputStates.keyW + inputStates.keyS + inputStates.keyD >= 2) coeff = 0.7;
+    //IN GAME
+    if (playing == 1) {
+        // 1) On efface l'Ã©cran
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (inputStates.keyA) {
-        //on verifie qu'il n'y a pas de collision avec un mur a gauche
-        if (walls.every(wall => !wall.collisionLeft(char1.x - 20, char1.y - 20, 40, 40))) {
-            char1.move(-coeff, 0);
+        //On dessine les murs et les trous
+        walls.forEach(wall => wall.draw(ctx));
+        holes.forEach(hole => hole.draw(ctx));
+
+        // 2) On dessine et on déplace les char
+        chars.forEach(char => char.draw(ctx));
+        charsAI.forEach(char => char.intelligence.applyStrategy());
+        char1.updateAngle(mousepos);
+
+        // On dessine chaque balle
+        bullets.forEach(bullet => bullet.draw(ctx));
+
+        // On regarde si on doit tirer
+        if (inputStates.SPACE) {
+            char1.addBullet(Date.now(), width, height);
         }
-    }
-    if (inputStates.keyW) {
-        //on verifie qu'il n'y a pas de collision avec un mur au-dessus
-        if (walls.every(wall => !wall.collisionTop(char1.x - 20, char1.y - 20, 40, 40))) {
-            char1.move(0, -coeff);
+        if (inputStates.mouseclick) {
+            char1.addBullet(Date.now(), width, height);
         }
-    }
-    if (inputStates.keyS) {
-        //on verifie qu'il n'y a pas de collision avec un mur en-dessous
-        if (walls.every(wall => !wall.collisionBottom(char1.x - 20, char1.y - 20, 40, 40))) {
-            char1.move(0, coeff);
+
+        var coeff = 1;
+        if (inputStates.keyA + inputStates.keyW + inputStates.keyS + inputStates.keyD >= 2) coeff = 0.7;
+
+        if (inputStates.keyA) {
+            char1.moveL(coeff);
         }
-    }
-    if (inputStates.keyD) {
-        //on verifie qu'il n'y a pas de collision avec un mur a droite
-        if (walls.every(wall => !wall.collisionRight(char1.x - 20, char1.y - 20, 40, 40))) {
-            char1.move(coeff, 0);
+        if (inputStates.keyW) {
+            char1.moveT(coeff);
+        }
+        if (inputStates.keyS) {
+            char1.moveB(coeff);
+        }
+        if (inputStates.keyD) {
+            char1.moveR(coeff);
         }
     }
 
