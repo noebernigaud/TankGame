@@ -1,15 +1,19 @@
 import { distance, getMousePos, collR, collL, collB, collT, coll } from './utils.js'
 import Bullet from './bullet.js';
-import { bullets, chars, charsAI, walls, holes, char1, stopgame } from './game.js';
+import Mine from './mine.js';
+import { bullets, chars, charsAI, walls, mines, holes, char1, stopgame } from './game.js';
 import Intelligence from './intelligence.js';
 
 export default class Char {
   constructor(x, y, angle, vitesse, tempsMinEntreTirsEnMillisecondes) {
     this.x = x;
     this.y = y;
+    this.sizex = 40;
+    this.sizey = 40;
     this.angle = angle;
     this.v = vitesse;
     this.delayMinBetweenBullets = tempsMinEntreTirsEnMillisecondes;
+    this.delayMinBetweenMines = 5000;
     this.intelligence = new Intelligence(this);
   }
 
@@ -17,11 +21,11 @@ export default class Char {
     ctx.save();
     ctx.translate(this.x, this.y);
     ctx.rotate(this.angle);
-    ctx.translate(-20, -20);
+    ctx.translate(-this.sizex / 2, -this.sizey / 2);
 
     ctx.fillStyle = 'rgb(65,105,225)';
     // corps
-    ctx.fillRect(0, 0, 40, 40);
+    ctx.fillRect(0, 0, this.sizex, this.sizey);
     // canon
     ctx.fillStyle = 'rgb(70,130,180)';
     ctx.fillRect(-20, 18, 20, 4);
@@ -39,33 +43,41 @@ export default class Char {
   //VERIFICATIONS QU'IL EST POSSIBLE D'ALLEZ DANS LA DIRECTION DEMANDEE
 
   moveL(coeff) {
-    if (walls.every(wall => !collL(char1.x - 20, char1.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
-      if (holes.every(hole => !collL(char1.x - 20, char1.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
-        char1.move(-coeff, 0);
+    if (walls.every(wall => !collL(this.x - 20, this.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
+      if (holes.every(hole => !collL(this.x - 20, this.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
+        if (chars.every(char => !collL(this.x - 20, this.y - 20, 40, 40, char.x-20, char.y-20, char.sizex, char.sizey))) {
+          this.move(-coeff, 0);
+        }
       }
     }
   }
 
   moveR(coeff) {
-    if (walls.every(wall => !collR(char1.x - 20, char1.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
-      if (holes.every(hole => !collR(char1.x - 20, char1.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
-        char1.move(coeff, 0);
+    if (walls.every(wall => !collR(this.x - 20, this.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
+      if (holes.every(hole => !collR(this.x - 20, this.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
+        if (chars.every(char => !collR(this.x - 20, this.y - 20, 40, 40, char.x-20, char.y-20, char.sizex, char.sizey))) {
+          this.move(coeff, 0);
+        }
       }
     }
   }
 
   moveT(coeff) {
-    if (walls.every(wall => !collT(char1.x - 20, char1.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
-      if (holes.every(hole => !collT(char1.x - 20, char1.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
-        char1.move(0, -coeff);
+    if (walls.every(wall => !collT(this.x - 20, this.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
+      if (holes.every(hole => !collT(this.x - 20, this.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
+        if (chars.every(char => !collT(this.x - 20, this.y - 20, 40, 40, char.x-20, char.y-20, char.sizex, char.sizey))) {
+          this.move(0, -coeff);
+        }
       }
     }
   }
 
   moveB(coeff) {
-    if (walls.every(wall => !collB(char1.x - 20, char1.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
-      if (holes.every(hole => !collB(char1.x - 20, char1.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
-        char1.move(0, coeff);
+    if (walls.every(wall => !collB(this.x - 20, this.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
+      if (holes.every(hole => !collB(this.x - 20, this.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
+        if (chars.every(char => !collB(this.x - 20, this.y - 20, 40, 40, char.x-20, char.y-20, char.sizex, char.sizey))) {
+          this.move(0, coeff);
+        }
       }
     }
   }
@@ -85,7 +97,6 @@ export default class Char {
 
     if (this.lastBulletTime !== undefined) {
       tempEcoule = time - this.lastBulletTime;
-      //console.log("temps écoulé = " + tempEcoule);
     }
 
     if ((this.lastBulletTime === undefined) || (tempEcoule > this.delayMinBetweenBullets)) {
@@ -96,7 +107,25 @@ export default class Char {
     }
   }
 
+  addMine(time){
+    var tempEcouleMine = 0;
+
+    if (this.lastMineTime !== undefined) {
+      tempEcouleMine = time - this.lastMineTime;
+    }
+
+    if ((this.lastMineTime === undefined) || (tempEcouleMine > this.delayMinBetweenMines)) {
+      mines.push(new Mine(this));
+      console.log("char " + this + "created a mine!");
+      // on mémorise le dernier temps.
+      this.lastMineTime = time;
+    }
+
+    console.log(tempEcouleMine + " " + time + " " + this.lastMineTime)
+  }
+
   removeChar() {
+    console.log("char destroyed");
     let position = chars.indexOf(this);
     chars.splice(position, 1);
     if (this === char1) {

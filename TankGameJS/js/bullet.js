@@ -23,59 +23,68 @@ export default class Bullet {
 
         this.move();
 
-        if (this.live < 0){
+        if (this.live < 0) {
             this.removeBullet(this);
-          }
+        }
     }
 
-  
+
     move(maxX, maxY) {
 
         // FONCTIONS DE COLLISION AVEC LES MURS
         // entraine le rebond de la balle et la perte d'une de ses vies
         // TODO le mur perd une vie si il est destructible.
 
-        //si un collision à gauche
-        if (walls.some(wall => collL(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey)) && (Math.cos(this.angle) > 0)) {
-            this.live--;
-            this.angle = Math.atan2(Math.sin(this.angle), -Math.cos(this.angle));
-            console.log("nouvel angle apres collision gauche " + this.angle + ", position " + this.x + " " + this.y);
-        }
-        //si un collision à droite
-        if(walls.some(wall => collR(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey)) && (Math.cos(this.angle) < 0)){
-            this.live--;
-            this.angle = Math.atan2(Math.sin(this.angle), -Math.cos(this.angle));
-            console.log("nouvel angle apres collision droite " + this.angle + ", position " + this.x + " " + this.y);
-        }
-        //si un collision en haut
-        if (walls.some(wall => collT(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey)) && (Math.sin(this.angle) > 0)) {
-            this.live--;
-            this.angle = Math.atan2(-Math.sin(this.angle), Math.cos(this.angle));
-            console.log("nouvel angle apres collision haut " + this.angle + ", position " + this.x + " " + this.y);
-        }
-        //si un collision en bas
-        if (walls.some(wall => collB(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey)) && (Math.sin(this.angle) < 0)) {
-            this.live--;
-            this.angle = Math.atan2(-Math.sin(this.angle), Math.cos(this.angle));
-            console.log("nouvel angle apres collision bas " + this.angle + ", position " + this.x + " " + this.y);
-        }
+        walls.forEach(wall => {
+
+            let collisionHappened = 0;
+
+            //si un collision à gauche
+            if (collL(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey) && (Math.cos(this.angle) > 0)) {
+                collisionHappened = 1;
+                this.angle = Math.atan2(Math.sin(this.angle), -Math.cos(this.angle));
+            }
+            //si un collision à droite
+            if (collR(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey) && (Math.cos(this.angle) < 0)) {
+                collisionHappened = 1;
+                this.angle = Math.atan2(Math.sin(this.angle), -Math.cos(this.angle));
+            }
+            //si un collision en haut
+            if (collT(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey) && (Math.sin(this.angle) > 0)) {
+                collisionHappened = 1;
+                this.angle = Math.atan2(-Math.sin(this.angle), Math.cos(this.angle));
+            }
+            //si un collision en bas
+            if (collB(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey) && (Math.sin(this.angle) < 0)) {
+                collisionHappened = 1;
+                this.angle = Math.atan2(-Math.sin(this.angle), Math.cos(this.angle));
+            }
+
+            //si une collision a eu lieu, la balle perd une vie et le mur se destruit (si il est destructible)
+            if (collisionHappened == 1) {
+                this.live--;
+                wall.destroy();
+            }
+        })
 
         //FONCTIONS DE COLLISIONS ENTRE BALLES
-        bullets.forEach( bullet => {
-            if (coll(this.x - 5, this.y - 5, 10, 10, bullet.x - 5, bullet.y - 5, 10, 10)){
+        bullets.forEach(bullet => {
+            if (coll(this.x - 5, this.y - 5, 10, 10, bullet.x - 5, bullet.y - 5, 10, 10)) {
                 bullet.removeBullet();
                 this.removeBullet();
-            }}
+            }
+        }
         );
 
         //FONCTONS DE COLLISIONS AVEC UN CHAR
-        chars.forEach( char => {
-            if (coll(this.x - 5, this.y - 5, 10, 10, char.x - 20, char.y - 20, 40, 40)){
+        chars.forEach(char => {
+            if (coll(this.x - 5, this.y - 5, 10, 10, char.x - 20, char.y - 20, 40, 40)) {
                 char.removeChar();
                 this.removeBullet();
-            }}
+            }
+        }
         );
-        
+
 
         // LA BALLE AVANCE DE SE VITESSE DANS SA DIRECTION DONNEE PAR L'ANGLE
         this.x -= this.speed * Math.cos(this.angle);

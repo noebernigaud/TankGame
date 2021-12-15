@@ -4,6 +4,7 @@ export default class Intelligence {
     }
 
     applyStrategy(char1, walls){
-        this.char.addBullet(Date.now());
+        //this.char.addBullet(Date.now());
+        this.char.moveL(1);
     }
 }

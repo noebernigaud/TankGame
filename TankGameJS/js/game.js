@@ -2,7 +2,7 @@ import Char from './char.js';
 import Hole from './hole.js';
 import { getMousePos } from './utils.js'
 import Wall from './wall.js';
-export { walls, holes, bullets, chars, charsAI, char1, stopgame };
+export { walls, holes, bullets, mines, chars, charsAI, char1, stopgame };
 
 var canvas, ctx, width, height;
 var char1;
@@ -11,6 +11,7 @@ var charAI;
 var chars;
 var walls;
 var holes;
+var mines;
 var bullets;
 var mousepos = { x: 0, y: 0 };
 var inputStates = {};
@@ -41,6 +42,8 @@ function init() {
         new Wall(width - 30, 0, 30, height, false),
         new Wall(width / 2, height / 2, 30, 100, false)
     );
+
+    mines = new Array();
 
     canvas.addEventListener('mousemove', (evt) => {
         mousepos = getMousePos(canvas, evt);
@@ -109,12 +112,15 @@ function startgame(){
 
     bullets = new Array();
 
+    mines = new Array();
+
     walls = new Array(
         new Wall(0, 0, width, 30, false),
         new Wall(0, 0, 30, height, false),
         new Wall(0, height - 30, width, 30, false),
         new Wall(width - 30, 0, 30, height, false),
-        new Wall(width / 2, height / 2, 30, 100, false)
+        new Wall(width / 2, height / 2, 30, 100, false),
+        new Wall(width / 2, height / 2 - 30, 30, 30, true)
     );
 
     holes = new Array(
@@ -143,24 +149,25 @@ function anime() {
         // 1) On efface l'Ã©cran
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        //On dessine les murs et les trous
+        //On dessine les murs, trous, mines, balles
         walls.forEach(wall => wall.draw(ctx));
         holes.forEach(hole => hole.draw(ctx));
+        mines.forEach(mine => mine.draw(ctx));
+        bullets.forEach(bullet => bullet.draw(ctx));
 
         // 2) On dessine et on déplace les char
         chars.forEach(char => char.draw(ctx));
         charsAI.forEach(char => char.intelligence.applyStrategy());
         char1.updateAngle(mousepos);
+        
 
-        // On dessine chaque balle
-        bullets.forEach(bullet => bullet.draw(ctx));
-
-        // On regarde si on doit tirer
+        // On regarde si on doit poser une mine
         if (inputStates.SPACE) {
-            char1.addBullet(Date.now(), width, height);
+            char1.addMine(Date.now());
         }
+        // On regarde si on doit tirer
         if (inputStates.mouseclick) {
-            char1.addBullet(Date.now(), width, height);
+            char1.addBullet(Date.now());
         }
 
         var coeff = 1;
