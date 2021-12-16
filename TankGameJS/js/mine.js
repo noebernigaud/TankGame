@@ -1,4 +1,4 @@
-import {chars, mines} from './game.js';
+import {chars, mines, mineImage} from './game.js';
 import {coll} from './utils.js';
 
 export default class Mine {
@@ -14,7 +14,7 @@ export default class Mine {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.fillStyle = 'yellow';
-        ctx.fillRect(0, 0, this.sizex, this.sizey);
+        ctx.drawImage(mineImage, 0, 0, this.sizex, this.sizey);
         ctx.restore();
         this.checkCollision();
     }

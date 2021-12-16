@@ -1,4 +1,4 @@
-import { walls, wallTexture } from './game.js';
+import { walls, wallTexture, wallDTexture } from './game.js';
 
 export default class Wall {
     constructor(x, y, destructable) {
@@ -13,8 +13,7 @@ export default class Wall {
         ctx.save();
         ctx.translate(this.x, this.y);
         if (this.destructable === true) { 
-            ctx.fillStyle = 'red';
-            ctx.fillRect(0, 0, this.sizex, this.sizey);
+            ctx.drawImage(wallDTexture, 0, 0, this.sizex, this.sizey);
         }
         else {
             ctx.drawImage(wallTexture, 0, 0, this.sizex, this.sizey);

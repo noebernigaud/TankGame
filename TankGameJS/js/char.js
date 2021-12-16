@@ -21,16 +21,8 @@ export default class Char {
     ctx.save();
     ctx.translate(this.x, this.y);
     ctx.rotate(this.angle);
-    ctx.translate(-this.sizex / 2, -this.sizey / 2);
-
-    ctx.fillStyle = 'rgb(65,105,225)';
-    // corps
+    ctx.translate(-this.sizex / 2 - 12, -this.sizey / 2);
     ctx.drawImage(tankImage, 0, 0, this.sizex + 12, this.sizey);
-    //ctx.fillRect(0, 0, this.sizex, this.sizey);
-    // canon
-    /*ctx.fillStyle = 'rgb(70,130,180)';
-    ctx.fillRect(-20, 18, 20, 4);*/
-
     ctx.restore();
 
   }

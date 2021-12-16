@@ -2,7 +2,7 @@ import Char from './char.js';
 import Hole from './hole.js';
 import { getMousePos } from './utils.js'
 import Wall from './wall.js';
-export { walls, holes, bullets, mines, chars, charsAI, char1, stopgame, wallTexture, holeImage, tankImage, bulletImage };
+export { walls, holes, bullets, mines, chars, charsAI, char1, stopgame, wallTexture, wallDTexture, holeImage, tankImage, bulletImage, mineImage };
 
 var canvas, ctx, width, height;
 var char1;
@@ -20,12 +20,16 @@ var backgroundTexture = new Image();
 backgroundTexture.src = './images/woodTexture.jpg';
 var wallTexture = new Image();
 wallTexture.src = './images/wallTexture.jpg';
+var wallDTexture = new Image();
+wallDTexture.src = './images/wallDTexture.jpg';
 var holeImage = new Image();
 holeImage.src = './images/hole.png';
 var tankImage = new Image();
 tankImage.src = './images/tank.png';
 var bulletImage = new Image();
 bulletImage.src = './images/bullet.png';
+var mineImage = new Image();
+mineImage.src = './images/minemine.png';
 
 window.onload = init;
 
