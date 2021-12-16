@@ -106,7 +106,7 @@ function stopgame(){
 
 function startgame(){
     char1 = new Char(100, 100, 0, 1, 1000);
-    charAI = new Char(500, 200, 0, 1, 1000);
+    charAI = new Char(500, 200, 0, 0.7, 2000);
     charsAI = [charAI];
     chars = [char1, charAI];
 
@@ -157,7 +157,7 @@ function anime() {
 
         // 2) On dessine et on déplace les char
         chars.forEach(char => char.draw(ctx));
-        charsAI.forEach(char => char.intelligence.applyStrategy());
+        charsAI.forEach(char => char.intelligence.applyStrategy(char1));
         char1.updateAngle(mousepos);
         
 

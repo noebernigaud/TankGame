@@ -40,49 +40,71 @@ export default class Char {
     this.y += speedY * this.v;
   }
 
-  //VERIFICATIONS QU'IL EST POSSIBLE D'ALLEZ DANS LA DIRECTION DEMANDEE
+  //FONCTIONS UTILITAIRES DE VERIFICATION DES COLLISIONS AVEC AUTRES OBJETS DANS LES DIFFERENTES DIRECTIONS
 
-  moveL(coeff) {
+  collObjL(){
     if (walls.every(wall => !collL(this.x - 20, this.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
       if (holes.every(hole => !collL(this.x - 20, this.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
         if (chars.every(char => !collL(this.x - 20, this.y - 20, 40, 40, char.x-20, char.y-20, char.sizex, char.sizey))) {
-          this.move(-coeff, 0);
+          return false;
         }
       }
     }
+    return true;
   }
 
-  moveR(coeff) {
+  collObjR(){
     if (walls.every(wall => !collR(this.x - 20, this.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
       if (holes.every(hole => !collR(this.x - 20, this.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
         if (chars.every(char => !collR(this.x - 20, this.y - 20, 40, 40, char.x-20, char.y-20, char.sizex, char.sizey))) {
-          this.move(coeff, 0);
+          return false;
         }
       }
     }
+    return true;
   }
 
-  moveT(coeff) {
+  collObjT(){
     if (walls.every(wall => !collT(this.x - 20, this.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
       if (holes.every(hole => !collT(this.x - 20, this.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
         if (chars.every(char => !collT(this.x - 20, this.y - 20, 40, 40, char.x-20, char.y-20, char.sizex, char.sizey))) {
-          this.move(0, -coeff);
+          return false;
         }
       }
     }
+    return true;
   }
 
-  moveB(coeff) {
+  collObjB(){
     if (walls.every(wall => !collB(this.x - 20, this.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
       if (holes.every(hole => !collB(this.x - 20, this.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
         if (chars.every(char => !collB(this.x - 20, this.y - 20, 40, 40, char.x-20, char.y-20, char.sizex, char.sizey))) {
-          this.move(0, coeff);
+          return false;
         }
       }
     }
+    return true;
+  }
+  
+
+  //DEPLACEMENT DU CHAR DANS UNE DIRECTION SI IL N'Y A PAS COLLISION
+
+  moveL(coeff) {
+    if (!this.collObjL()) {this.move(-coeff, 0);}
   }
 
-  //TODO all directions!
+  moveR(coeff) {
+    if (!this.collObjR()) {this.move(coeff, 0);}
+  }
+
+  moveT(coeff) {
+    if (!this.collObjT()) {this.move(0, -coeff);}
+  }
+
+  moveB(coeff) {
+    if (!this.collObjB()) {this.move(0, coeff);}
+  }
+
 
   updateAngle(mousepos) {
     // 2) On déplace la balle 

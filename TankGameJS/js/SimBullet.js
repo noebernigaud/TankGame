@@ -1,38 +1,32 @@
-import { walls, bullets, chars } from './game.js';
+import { walls, chars } from './game.js';
 import { collR, collL, collB, collT, coll } from './utils.js';
 
-export default class Bullet {
-    constructor(char, live, speed) {
-        this.angle = char.angle;
-        this.x = char.x;
+export default class SimBullet {
+    constructor(charTireur, live, speed, target) {
+        this.angle = charTireur.angle;
+        this.x = charTireur.x;
         this.x -= 40 * Math.cos(this.angle);
-        this.y = char.y;
+        this.y = charTireur.y;
         this.y -= 40 * Math.sin(this.angle);
         this.live = live;
         this.speed = speed;
+        this.target = target;
+        this.collWall = false;
+        this.collTarget = false;
+        this.simulate();
     }
 
-    draw(ctx) {
-
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.angle);
-        ctx.fillRect(0, 0, 10, 5);
-        ctx.restore();
-
-        this.move();
-
-        if (this.live < 0) {
-            this.removeBullet(this);
+    simulate() {
+        while(this.live >= 0){
+            this.move();
         }
     }
 
 
-    move(maxX, maxY) {
+    move() {
 
         // FONCTIONS DE COLLISION AVEC LES MURS
         // entraine le rebond de la balle et la perte d'une de ses vies
-        // TODO le mur perd une vie si il est destructible.
 
         walls.forEach(wall => {
 
@@ -59,27 +53,22 @@ export default class Bullet {
                 this.angle = Math.atan2(-Math.sin(this.angle), Math.cos(this.angle));
             }
 
-            //si une collision a eu lieu, la balle perd une vie et le mur se destruit (si il est destructible)
+            //si une collision a eu lieu, la balle perd une vie et on enregistre la collision
             if (collisionHappened == 1) {
                 this.live--;
-                wall.destroy();
+                this.collWall = true;
             }
         })
 
-        //FONCTIONS DE COLLISIONS ENTRE BALLES
-        bullets.forEach(bullet => {
-            if (coll(this.x - 5, this.y - 5, 10, 10, bullet.x - 5, bullet.y - 5, 10, 10)) {
-                bullet.removeBullet();
-                this.removeBullet();
-            }
-        }
-        );
-
         //FONCTONS DE COLLISIONS AVEC UN CHAR
+
         chars.forEach(char => {
+
             if (coll(this.x - 5, this.y - 5, 10, 10, char.x - 20, char.y - 20, 40, 40)) {
-                char.removeChar();
-                this.removeBullet();
+                this.live = -1;
+                if(char === this.target){
+                    this.collTarget = true;
+                }
             }
         }
         );
@@ -88,10 +77,5 @@ export default class Bullet {
         // LA BALLE AVANCE DE SE VITESSE DANS SA DIRECTION DONNEE PAR L'ANGLE
         this.x -= this.speed * Math.cos(this.angle);
         this.y -= this.speed * Math.sin(this.angle);
-    }
-
-    removeBullet() {
-        let position = bullets.indexOf(this);
-        bullets.splice(position, 1);
     }
 }
