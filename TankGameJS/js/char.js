@@ -1,7 +1,7 @@
 import { distance, getMousePos, collR, collL, collB, collT, coll } from './utils.js'
 import Bullet from './bullet.js';
 import Mine from './mine.js';
-import { bullets, chars, charsAI, walls, mines, holes, char1, stopgame } from './game.js';
+import { bullets, chars, charsAI, walls, mines, holes, char1, stopgame, tankImage } from './game.js';
 import Intelligence from './intelligence.js';
 
 export default class Char {
@@ -25,10 +25,11 @@ export default class Char {
 
     ctx.fillStyle = 'rgb(65,105,225)';
     // corps
-    ctx.fillRect(0, 0, this.sizex, this.sizey);
+    ctx.drawImage(tankImage, 0, 0, this.sizex + 12, this.sizey);
+    //ctx.fillRect(0, 0, this.sizex, this.sizey);
     // canon
-    ctx.fillStyle = 'rgb(70,130,180)';
-    ctx.fillRect(-20, 18, 20, 4);
+    /*ctx.fillStyle = 'rgb(70,130,180)';
+    ctx.fillRect(-20, 18, 20, 4);*/
 
     ctx.restore();
 

@@ -1,4 +1,4 @@
-import { walls, bullets, chars } from './game.js';
+import { walls, bullets, chars, bulletImage } from './game.js';
 import { collR, collL, collB, collT, coll } from './utils.js';
 
 export default class Bullet {
@@ -17,7 +17,7 @@ export default class Bullet {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.angle);
-        ctx.fillRect(0, 0, 10, 5);
+        ctx.drawImage(bulletImage, 0, 0, 20, 10);
         ctx.restore();
 
         this.move();

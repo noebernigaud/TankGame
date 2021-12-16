@@ -1,19 +1,24 @@
-import { walls } from './game.js';
+import { walls, wallTexture } from './game.js';
 
 export default class Wall {
-    constructor(x, y, sizex, sizey, destructable) {
+    constructor(x, y, destructable) {
         this.x = x;
         this.y = y;
-        this.sizex = sizex;
-        this.sizey = sizey;
+        this.sizex = 40;
+        this.sizey = 40;
         this.destructable = destructable
     }
 
     draw(ctx) {
         ctx.save();
         ctx.translate(this.x, this.y);
-        if (this.destructable === true) { ctx.fillStyle = 'red'; }
-        ctx.fillRect(0, 0, this.sizex, this.sizey);
+        if (this.destructable === true) { 
+            ctx.fillStyle = 'red';
+            ctx.fillRect(0, 0, this.sizex, this.sizey);
+        }
+        else {
+            ctx.drawImage(wallTexture, 0, 0, this.sizex, this.sizey);
+        }
         ctx.restore();
     }
 

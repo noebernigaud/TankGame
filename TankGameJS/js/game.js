@@ -2,7 +2,7 @@ import Char from './char.js';
 import Hole from './hole.js';
 import { getMousePos } from './utils.js'
 import Wall from './wall.js';
-export { walls, holes, bullets, mines, chars, charsAI, char1, stopgame };
+export { walls, holes, bullets, mines, chars, charsAI, char1, stopgame, wallTexture, holeImage, tankImage, bulletImage };
 
 var canvas, ctx, width, height;
 var char1;
@@ -16,6 +16,16 @@ var bullets;
 var mousepos = { x: 0, y: 0 };
 var inputStates = {};
 var playing;
+var backgroundTexture = new Image();
+backgroundTexture.src = './images/woodTexture.jpg';
+var wallTexture = new Image();
+wallTexture.src = './images/wallTexture.jpg';
+var holeImage = new Image();
+holeImage.src = './images/hole.png';
+var tankImage = new Image();
+tankImage.src = './images/tank.png';
+var bulletImage = new Image();
+bulletImage.src = './images/bullet.png';
 
 window.onload = init;
 
@@ -35,13 +45,7 @@ function init() {
 
     bullets = new Array();
 
-    walls = new Array(
-        new Wall(0, 0, width, 30, false),
-        new Wall(0, 0, 30, height, false),
-        new Wall(0, height - 30, width, 30, false),
-        new Wall(width - 30, 0, 30, height, false),
-        new Wall(width / 2, height / 2, 30, 100, false)
-    );
+    walls = new Array();
 
     mines = new Array();
 
@@ -114,14 +118,26 @@ function startgame(){
 
     mines = new Array();
 
+    //INITIALIZING WALLS AND HOLES
+
     walls = new Array(
-        new Wall(0, 0, width, 30, false),
-        new Wall(0, 0, 30, height, false),
-        new Wall(0, height - 30, width, 30, false),
-        new Wall(width - 30, 0, 30, height, false),
-        new Wall(width / 2, height / 2, 30, 100, false),
-        new Wall(width / 2, height / 2 - 30, 30, 30, true)
+        new Wall(width / 2, height / 2, false),
+        new Wall(width / 2, height / 2 - 40, true)
     );
+
+    for(var i = -10; i < width; i += 30){
+        //top wall
+        walls.push(new Wall(i, -10, false));
+        //bottom wall
+        walls.push(new Wall(i, height - 30, false));
+    }
+
+    for(var i = -10; i < height; i += 30){
+        //left wall
+        walls.push(new Wall(-10, i, false));
+        //right wall
+        walls.push(new Wall(width - 30, i, false));
+    }
 
     holes = new Array(
         new Hole(300, 300)
@@ -148,6 +164,9 @@ function anime() {
     if (playing == 1) {
         // 1) On efface l'Ã©cran
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        //Image de fond
+        ctx.drawImage(backgroundTexture, 0, 0, canvas.width, canvas.height);
 
         //On dessine les murs, trous, mines, balles
         walls.forEach(wall => wall.draw(ctx));

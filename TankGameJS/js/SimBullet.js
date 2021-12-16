@@ -17,8 +17,10 @@ export default class SimBullet {
     }
 
     simulate() {
-        while(this.live >= 0){
+        var i = 0;
+        while(this.live >= 0 && i < 1000){
             this.move();
+            i++;
         }
     }
 

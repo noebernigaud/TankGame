@@ -1,3 +1,4 @@
+import { holeImage } from './game.js';
 
 export default class Hole {
     constructor(x, y) {
@@ -11,7 +12,7 @@ export default class Hole {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.fillStyle = 'green';
-        ctx.fillRect(0, 0, this.sizex, this.sizey);
+        ctx.drawImage(holeImage, 0, 0, this.sizex, this.sizey);
         ctx.restore();
     }
 
