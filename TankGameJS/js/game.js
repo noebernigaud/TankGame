@@ -7,7 +7,6 @@ export { walls, holes, bullets, mines, chars, charsAI, char1, stopgame, wallText
 var canvas, ctx, width, height;
 var char1;
 var charsAI;
-var charAI;
 var chars;
 var walls;
 var holes;
@@ -16,18 +15,31 @@ var bullets;
 var mousepos = { x: 0, y: 0 };
 var inputStates = {};
 var playing;
+
 var backgroundTexture = new Image();
 backgroundTexture.src = './images/woodTexture.jpg';
+
 var wallTexture = new Image();
 wallTexture.src = './images/wallTexture.jpg';
 var wallDTexture = new Image();
 wallDTexture.src = './images/wallDTexture.jpg';
+
 var holeImage = new Image();
 holeImage.src = './images/hole.png';
+
 var tankImage = new Image();
 tankImage.src = './images/tank.png';
+var tankImageRed = new Image();
+tankImageRed.src = './images/tankRed.png';
+var tankImageBlue = new Image();
+tankImageBlue.src = './images/tankBlue.png';
+var tankImageGreen = new Image();
+tankImageGreen.src = './images/tankGreen.png';
+
+
 var bulletImage = new Image();
 bulletImage.src = './images/bullet.png';
+
 var mineImage = new Image();
 mineImage.src = './images/minemine.png';
 
@@ -43,7 +55,7 @@ function init() {
 
     playing = 0;
 
-    char1 = new Char(100, 100, 0, 1, 1000);
+    char1 = new Char(100, 100, 0, 1, 1000, tankImage);
     charsAI = [];
     chars = [char1];
 
@@ -106,17 +118,19 @@ function init() {
 
 //GAME OVER GO TO MENU
 
-function stopgame(){
+function stopgame() {
     playing = 0;
 }
 
 //DEBUT D'UNE NOUVELLE PARTIE
 
-function startgame(){
-    char1 = new Char(100, 100, 0, 1, 1000);
-    charAI = new Char(500, 200, 0, 0.7, 2000);
-    charsAI = [charAI];
-    chars = [char1, charAI];
+function startgame() {
+    char1 = new Char(100, 100, 0, 1, 1000, tankImage);
+    charsAI = [
+        new Char(500, 200, 0, 0.7, 2000, tankImageRed),
+        new Char(500, 500, 0, 0, 1000, tankImageGreen)];
+    chars = charsAI.slice();
+    chars.push(char1);
 
     bullets = new Array();
 
@@ -129,14 +143,14 @@ function startgame(){
         new Wall(width / 2, height / 2 - 40, true)
     );
 
-    for(var i = -10; i < width; i += 30){
+    for (var i = -10; i < width; i += 30) {
         //top wall
         walls.push(new Wall(i, -10, false));
         //bottom wall
         walls.push(new Wall(i, height - 30, false));
     }
 
-    for(var i = -10; i < height; i += 30){
+    for (var i = -10; i < height; i += 30) {
         //left wall
         walls.push(new Wall(-10, i, false));
         //right wall
@@ -161,7 +175,8 @@ function anime() {
         ctx.fillText('Press Space to start', 200, 300);
         if (inputStates.SPACE) {
             startgame();
-            inputStates.SPACE = false; }
+            inputStates.SPACE = false;
+        }
     }
 
     //IN GAME
@@ -182,7 +197,7 @@ function anime() {
         chars.forEach(char => char.draw(ctx));
         charsAI.forEach(char => char.intelligence.applyStrategy(char1));
         char1.updateAngle(mousepos);
-        
+
 
         // On regarde si on doit poser une mine
         if (inputStates.SPACE) {

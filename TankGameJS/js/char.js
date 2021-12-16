@@ -1,11 +1,11 @@
 import { distance, getMousePos, collR, collL, collB, collT, coll } from './utils.js'
 import Bullet from './bullet.js';
 import Mine from './mine.js';
-import { bullets, chars, charsAI, walls, mines, holes, char1, stopgame, tankImage } from './game.js';
+import { bullets, chars, charsAI, walls, mines, holes, char1, stopgame} from './game.js';
 import Intelligence from './intelligence.js';
 
 export default class Char {
-  constructor(x, y, angle, vitesse, tempsMinEntreTirsEnMillisecondes) {
+  constructor(x, y, angle, vitesse, tempsMinEntreTirsEnMillisecondes, img) {
     this.x = x;
     this.y = y;
     this.sizex = 40;
@@ -15,6 +15,7 @@ export default class Char {
     this.delayMinBetweenBullets = tempsMinEntreTirsEnMillisecondes;
     this.delayMinBetweenMines = 5000;
     this.intelligence = new Intelligence(this);
+    this.img = img;
   }
 
   draw(ctx) {
@@ -22,7 +23,7 @@ export default class Char {
     ctx.translate(this.x, this.y);
     ctx.rotate(this.angle);
     ctx.translate(-this.sizex / 2 - 12, -this.sizey / 2);
-    ctx.drawImage(tankImage, 0, 0, this.sizex + 12, this.sizey);
+    ctx.drawImage(this.img, 0, 0, this.sizex + 12, this.sizey);
     ctx.restore();
 
   }
