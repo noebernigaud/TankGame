@@ -15,6 +15,7 @@ var bullets;
 var mousepos = { x: 0, y: 0 };
 var inputStates = {};
 var playing;
+var level;
 
 var backgroundTexture = new Image();
 backgroundTexture.src = './images/woodTexture.jpg';
@@ -55,15 +56,7 @@ function init() {
 
     playing = 0;
 
-    char1 = new Char(100, 100, 0, 1, 1000, tankImage);
-    charsAI = [];
-    chars = [char1];
-
-    bullets = new Array();
-
-    walls = new Array();
-
-    mines = new Array();
+    level = 0;
 
     canvas.addEventListener('mousemove', (evt) => {
         mousepos = getMousePos(canvas, evt);
@@ -124,25 +117,67 @@ function stopgame() {
 
 //DEBUT D'UNE NOUVELLE PARTIE
 
-function startgame() {
-    char1 = new Char(100, 100, 0, 1, 1000, tankImage);
-    charsAI = [
-        new Char(500, 200, 0, 0.7, 2000, tankImageRed),
-        new Char(500, 500, 0, 0, 1000, tankImageGreen)];
-    chars = charsAI.slice();
-    chars.push(char1);
+function startgame(level) {
 
+    // LEVEL 1
+    switch (level) {
+        case (0): {
+            char1 = new Char(200, height/2, 0, 1, 1000, tankImage);
+            charsAI = [
+                new Char(850, height/2, 0, 0, 1000, tankImageGreen)];
+            chars = charsAI.slice();
+            chars.push(char1);
+
+            //INITIALIZING WALLS AND HOLES
+
+            walls = new Array();
+
+            for (var i = 0; i < 6; i++) {
+                if(i < 2 || i > 3){
+                    walls.push(new Wall(width/2 + 40, height / 2 - 120 + 40 * i, false));
+                    walls.push(new Wall(width/2 - 200, height / 2 - 120 + 40 * i, false));
+                }
+                else walls.push(new Wall(width/2 + 40, height / 2 - 120 + 40 * i, true));
+            }
+
+            holes = new Array();
+            break;
+        }
+        default: {
+            char1 = new Char(150, height - 150, 0, 1, 1000, tankImage);
+            charsAI = [
+                new Char(width - 150, 150, 0, 0.7, 2000, tankImageRed)];
+            chars = charsAI.slice();
+            chars.push(char1);
+
+            bullets = new Array();
+
+            mines = new Array();
+
+            //INITIALIZING WALLS AND HOLES
+
+            walls = new Array();
+
+            for (var i = 0; i < 12; i++) {
+                if(i < 8){
+                    walls.push(new Wall(180 + 40 + 40 * i, 200, false));
+                    walls.push(new Wall(width - 180 - 40 * i, 400, false));
+                }
+                else{
+                    walls.push(new Wall(180 + 40 + 40 * i, 200, true));
+                    walls.push(new Wall(width - 180 - 40 * i, 400, true));
+                }
+            }
+
+            holes = new Array();
+        }
+    }
+
+    //BULLETS AND MINES INIT
     bullets = new Array();
-
     mines = new Array();
 
-    //INITIALIZING WALLS AND HOLES
-
-    walls = new Array(
-        new Wall(width / 2, height / 2, false),
-        new Wall(width / 2, height / 2 - 40, true)
-    );
-
+    //TOP, BOTTOM, RIGHT, LEFT WALLS - ALWAYS HERE NO MATTER THE LEVEL
     for (var i = -10; i < width; i += 30) {
         //top wall
         walls.push(new Wall(i, -10, false));
@@ -157,9 +192,6 @@ function startgame() {
         walls.push(new Wall(width - 30, i, false));
     }
 
-    holes = new Array(
-        new Hole(300, 300)
-    );
 
     playing = 1;
 }
@@ -171,10 +203,12 @@ function anime() {
     //MENU
     if (playing == 0) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.font = "30px Arial";
-        ctx.fillText('Press Space to start', 200, 300);
+        ctx.font = "50px Arial";
+        ctx.fillText('Press Space to start', 200, 400);
+        ctx.fillText('You reached level : ' + level, 200, 200);
         if (inputStates.SPACE) {
-            startgame();
+            level = 0;
+            startgame(level);
             inputStates.SPACE = false;
         }
     }
@@ -222,6 +256,12 @@ function anime() {
         }
         if (inputStates.keyD) {
             char1.moveR(coeff);
+        }
+
+        //VERIFICATION TOUS CHARS ENNEMIS ELIMINES
+        if (charsAI.length == 0) {
+            level += 1;
+            startgame(level);
         }
     }
 
