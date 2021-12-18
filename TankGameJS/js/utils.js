@@ -21,28 +21,28 @@ function coll(xhitbox, yhitbox, xsize, ysize, xhitbox2, yhitbox2, xsize2, ysize2
 }
 
 function collR(xhitbox, yhitbox, xsize, ysize, xhitbox2, yhitbox2, xsize2, ysize2) {
-    if ((xhitbox + xsize + 2 > xhitbox2) && (xhitbox + xsize/2 - 3 < xhitbox2) && (yhitbox + ysize > yhitbox2) && (yhitbox < yhitbox2 + ysize2)){
+    if ((xhitbox + xsize + 5 > xhitbox2) && (xhitbox + xsize/2 < xhitbox2) && (yhitbox + ysize > yhitbox2) && (yhitbox < yhitbox2 + ysize2)){
         return true;
     }
     return false;
 }
 
 function collL(xhitbox, yhitbox, xsize, ysize, xhitbox2, yhitbox2, xsize2, ysize2) {
-    if ((xhitbox - 2 < xhitbox2 + xsize2) && (xhitbox + xsize/2 + 3 > xhitbox2 + xsize2) && (yhitbox + ysize > yhitbox2) && (yhitbox < yhitbox2 + ysize2)){
+    if ((xhitbox - 5 < xhitbox2 + xsize2) && (xhitbox + xsize/2 > xhitbox2 + xsize2) && (yhitbox + ysize > yhitbox2) && (yhitbox < yhitbox2 + ysize2)){
         return true;
     }
     return false;
 }
 
 function collB(xhitbox, yhitbox, xsize, ysize, xhitbox2, yhitbox2, xsize2, ysize2) {
-    if ((yhitbox + ysize + 2 > yhitbox2) && (yhitbox + ysize/2 - 3 < yhitbox2) && (xhitbox + xsize > xhitbox2) && (xhitbox < xhitbox2 + xsize2)){
+    if ((yhitbox + ysize + 5 > yhitbox2) && (yhitbox + ysize/2 < yhitbox2) && (xhitbox + xsize > xhitbox2) && (xhitbox < xhitbox2 + xsize2)){
         return true;
     }
     return false;
 }
 
 function collT(xhitbox, yhitbox, xsize, ysize, xhitbox2, yhitbox2, xsize2, ysize2) {
-    if ((yhitbox - 2 < yhitbox2 + ysize2) && (yhitbox + ysize/2 + 3 > yhitbox2 + ysize2) && (xhitbox + xsize > xhitbox2) && (xhitbox < xhitbox2 + xsize2)){
+    if ((yhitbox - 5 < yhitbox2 + ysize2) && (yhitbox + ysize/2 > yhitbox2 + ysize2) && (xhitbox + xsize > xhitbox2) && (xhitbox < xhitbox2 + xsize2)){
         return true;
     }
     return false;

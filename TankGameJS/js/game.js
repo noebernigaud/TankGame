@@ -292,6 +292,7 @@ function anime() {
             char1.addBullet(Date.now());
         }
 
+        //DEPLACEMENTS DU CHAR
         var coeff = 1;
         if (inputStates.keyA + inputStates.keyW + inputStates.keyS + inputStates.keyD >= 2) coeff = 0.7;
 

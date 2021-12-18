@@ -116,6 +116,7 @@ export default class Char {
     }
 
     if ((this.lastBulletTime === undefined) || (tempEcoule > this.delayMinBetweenBullets)) {
+      console.log("new bullet");
       bullets.push(new Bullet(this, 1, 8));
       bulletFiredSound.play();
       // on mémorise le dernier temps.
