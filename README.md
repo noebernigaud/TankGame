@@ -20,5 +20,3 @@ Tank game similar to the Wii tank game coded in Javascript for a university proj
 **TODO**
 
 - Implements different levels
-- Menu and Highscores
-- Level editor
