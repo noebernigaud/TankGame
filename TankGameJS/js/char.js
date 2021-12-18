@@ -1,7 +1,7 @@
 import { distance, getMousePos, collR, collL, collB, collT, coll } from './utils.js'
 import Bullet from './bullet.js';
 import Mine from './mine.js';
-import { bullets, chars, charsAI, walls, mines, holes, char1, stopgame, bulletFiredSound, explosionSound, minePlacedSound} from './game.js';
+import { bullets, chars, charsAI, walls, mines, holes, char1, stopgame, bulletFiredSound, explosionSound, minePlacedSound } from './game.js';
 import Intelligence from './intelligence.js';
 
 export default class Char {
@@ -36,10 +36,10 @@ export default class Char {
 
   //FONCTIONS UTILITAIRES DE VERIFICATION DES COLLISIONS AVEC AUTRES OBJETS DANS LES DIFFERENTES DIRECTIONS
 
-  collObjL(){
+  collObjL() {
     if (walls.every(wall => !collL(this.x - 20, this.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
       if (holes.every(hole => !collL(this.x - 20, this.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
-        if (chars.every(char => !collL(this.x - 20, this.y - 20, 40, 40, char.x-20, char.y-20, char.sizex, char.sizey))) {
+        if (chars.every(char => !collL(this.x - 20, this.y - 20, 40, 40, char.x - 20, char.y - 20, char.sizex, char.sizey))) {
           return false;
         }
       }
@@ -47,10 +47,10 @@ export default class Char {
     return true;
   }
 
-  collObjR(){
+  collObjR() {
     if (walls.every(wall => !collR(this.x - 20, this.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
       if (holes.every(hole => !collR(this.x - 20, this.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
-        if (chars.every(char => !collR(this.x - 20, this.y - 20, 40, 40, char.x-20, char.y-20, char.sizex, char.sizey))) {
+        if (chars.every(char => !collR(this.x - 20, this.y - 20, 40, 40, char.x - 20, char.y - 20, char.sizex, char.sizey))) {
           return false;
         }
       }
@@ -58,10 +58,10 @@ export default class Char {
     return true;
   }
 
-  collObjT(){
+  collObjT() {
     if (walls.every(wall => !collT(this.x - 20, this.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
       if (holes.every(hole => !collT(this.x - 20, this.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
-        if (chars.every(char => !collT(this.x - 20, this.y - 20, 40, 40, char.x-20, char.y-20, char.sizex, char.sizey))) {
+        if (chars.every(char => !collT(this.x - 20, this.y - 20, 40, 40, char.x - 20, char.y - 20, char.sizex, char.sizey))) {
           return false;
         }
       }
@@ -69,34 +69,34 @@ export default class Char {
     return true;
   }
 
-  collObjB(){
+  collObjB() {
     if (walls.every(wall => !collB(this.x - 20, this.y - 20, 40, 40, wall.x, wall.y, wall.sizex, wall.sizey))) {
       if (holes.every(hole => !collB(this.x - 20, this.y - 20, 40, 40, hole.x, hole.y, hole.sizex, hole.sizey))) {
-        if (chars.every(char => !collB(this.x - 20, this.y - 20, 40, 40, char.x-20, char.y-20, char.sizex, char.sizey))) {
+        if (chars.every(char => !collB(this.x - 20, this.y - 20, 40, 40, char.x - 20, char.y - 20, char.sizex, char.sizey))) {
           return false;
         }
       }
     }
     return true;
   }
-  
+
 
   //DEPLACEMENT DU CHAR DANS UNE DIRECTION SI IL N'Y A PAS COLLISION
 
   moveL(coeff) {
-    if (!this.collObjL()) {this.move(-coeff, 0);}
+    if (!this.collObjL()) { this.move(-coeff, 0); }
   }
 
   moveR(coeff) {
-    if (!this.collObjR()) {this.move(coeff, 0);}
+    if (!this.collObjR()) { this.move(coeff, 0); }
   }
 
   moveT(coeff) {
-    if (!this.collObjT()) {this.move(0, -coeff);}
+    if (!this.collObjT()) { this.move(0, -coeff); }
   }
 
   moveB(coeff) {
-    if (!this.collObjB()) {this.move(0, coeff);}
+    if (!this.collObjB()) { this.move(0, coeff); }
   }
 
 
@@ -116,15 +116,22 @@ export default class Char {
     }
 
     if ((this.lastBulletTime === undefined) || (tempEcoule > this.delayMinBetweenBullets)) {
-      console.log("new bullet");
-      bullets.push(new Bullet(this, 1, 8));
-      bulletFiredSound.play();
-      // on mémorise le dernier temps.
-      this.lastBulletTime = time;
+      let startposx = this.x - 40 * Math.cos(this.angle);
+      let startposy = this.y - 40 * Math.sin(this.angle);
+      if (walls.every(wall => !this.isInto(startposx, startposy, wall.x, wall.y, wall.sizex, wall.sizey))) {
+        bullets.push(new Bullet(this, 1, 6));
+        bulletFiredSound.play();
+        // on mémorise le dernier temps.
+        this.lastBulletTime = time;
+      }
     }
   }
 
-  addMine(time){
+  isInto(startposx, startposy, wallx, wally, sx, sy){
+    return ((startposx > wallx) && (startposx < wallx + sx) && (startposy > wally) && (startposy < wally + sy))
+  }
+
+  addMine(time) {
     var tempEcouleMine = 0;
 
     if (this.lastMineTime !== undefined) {
@@ -145,7 +152,6 @@ export default class Char {
     let position = chars.indexOf(this);
     chars.splice(position, 1);
     explosionSound.play();
-    console.log("explosion sound has been played!")
     if (this === char1) {
       stopgame();
     }

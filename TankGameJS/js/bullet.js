@@ -4,10 +4,8 @@ import { collR, collL, collB, collT, coll } from './utils.js';
 export default class Bullet {
     constructor(char, live, speed) {
         this.angle = char.angle;
-        this.x = char.x;
-        this.x -= 40 * Math.cos(this.angle);
-        this.y = char.y;
-        this.y -= 40 * Math.sin(this.angle);
+        this.x = char.x - 40 * Math.cos(this.angle);
+        this.y = char.y - 40 * Math.sin(this.angle);
         this.live = live;
         this.speed = speed;
     }
@@ -16,7 +14,7 @@ export default class Bullet {
 
         ctx.save();
         ctx.translate(this.x, this.y);
-        ctx.rotate(this.angle);
+        ctx.rotate(this.angle + 3.16);
         ctx.drawImage(bulletImage, 0, 0, 20, 10);
         ctx.restore();
 

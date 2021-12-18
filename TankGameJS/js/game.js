@@ -2,9 +2,9 @@ import Char from './char.js';
 import Hole from './hole.js';
 import { getMousePos } from './utils.js'
 import Wall from './wall.js';
-export { walls, holes, bullets, mines, chars, charsAI, char1, stopgame};
+export { walls, holes, bullets, mines, chars, charsAI, char1, stopgame };
 export { wallTexture, wallDTexture, holeImage, tankImage, bulletImage, mineImage };
-export {bulletFiredSound, explosionSound, bulletBounceSound, bulletDestroyedSound, minePlacedSound};
+export { bulletFiredSound, explosionSound, bulletBounceSound, bulletDestroyedSound, minePlacedSound };
 
 var canvas, ctx, width, height;
 var char1;
@@ -44,6 +44,7 @@ let explosionSound;
 let bulletBounceSound;
 let bulletDestroyedSound;
 let minePlacedSound;
+let applauseSound;
 
 
 var bulletImage = new Image();
@@ -65,7 +66,7 @@ function init() {
 
     playing = 0;
 
-    level = 0;
+    level = -1;
 
     explosionSound = new Howl({
         urls: ['http://schaeffer.ludo.free.fr/worms/DATA/Wav/Effects/Explosion2.wav'],
@@ -88,7 +89,13 @@ function init() {
     minePlacedSound = new Howl({
         urls: ['http://www.utc.fr/si28/ProjetsUpload/P2006_si28p004/flash_puzzle/sons/rush/mineplace.wav']
     });
-    
+
+    applauseSound = new Howl({
+        urls: ['http://sfxcontent.s3.amazonaws.com/soundfx/Human-Applause-LargeCrowd01.mp3']
+    });
+
+
+
 
     canvas.addEventListener('mousemove', (evt) => {
         mousepos = getMousePos(canvas, evt);
@@ -152,13 +159,15 @@ function stopgame() {
 
 function startgame(level) {
 
+    playing = 1;
+
     // LEVEL 1
     switch (level) {
 
         case (0): {
-            char1 = new Char(200, height/2, 0, 1, 1000, tankImage);
+            char1 = new Char(200, height / 2, 0, 1, 1000, tankImage);
             charsAI = [
-                new Char(850, height/2, 0, 0, 1000, tankImageGreen)];
+                new Char(850, height / 2, 0, 0, 1000, tankImageGreen)];
             chars = charsAI.slice();
             chars.push(char1);
 
@@ -167,17 +176,17 @@ function startgame(level) {
             walls = new Array();
 
             for (var i = 0; i < 6; i++) {
-                if(i < 2 || i > 3){
-                    walls.push(new Wall(width/2 + 40, height / 2 - 120 + 40 * i, false));
-                    walls.push(new Wall(width/2 - 200, height / 2 - 120 + 40 * i, false));
+                if (i < 2 || i > 3) {
+                    walls.push(new Wall(width / 2 + 40, height / 2 - 120 + 40 * i, false));
+                    walls.push(new Wall(width / 2 - 200, height / 2 - 120 + 40 * i, false));
                 }
-                else walls.push(new Wall(width/2 + 40, height / 2 - 120 + 40 * i, true));
+                else walls.push(new Wall(width / 2 + 40, height / 2 - 120 + 40 * i, true));
             }
 
             holes = new Array();
             break;
         }
-        default: {
+        case (1): {
 
             char1 = new Char(150, height - 150, 0, 1, 1000, tankImage);
             charsAI = [
@@ -194,17 +203,23 @@ function startgame(level) {
             walls = new Array();
 
             for (var i = 0; i < 12; i++) {
-                if(i < 8){
+                if (i < 8) {
                     walls.push(new Wall(180 + 40 + 40 * i, 200, false));
                     walls.push(new Wall(width - 180 - 40 * i, 400, false));
                 }
-                else{
+                else {
                     walls.push(new Wall(180 + 40 + 40 * i, 200, true));
                     walls.push(new Wall(width - 180 - 40 * i, 400, true));
                 }
             }
 
             holes = new Array();
+            break;
+        }
+        default: {
+            playing = 2;
+            pausebackgroundMusic();
+            applauseSound.play();
         }
     }
 
@@ -226,9 +241,6 @@ function startgame(level) {
         //right wall
         walls.push(new Wall(width - 30, i, false));
     }
-
-
-    playing = 1;
 }
 
 //BACKGROUND MUSIC
@@ -237,13 +249,13 @@ function playBackgroundMusic() {
     let audioPlayer = document.querySelector("#audioPlayer");
     audioPlayer.loop = true;
     audioPlayer.play();
- }
+}
 
- function pausebackgroundMusic() {
+function pausebackgroundMusic() {
     let audioPlayer = document.querySelector("#audioPlayer");
-    audioPlayer.pause(); 
-    audioPlayer.currentTime = 0; 
- }
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
+}
 
 //ANIMATION
 
@@ -253,19 +265,35 @@ function anime() {
     if (playing == 0) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.font = "50px Arial";
-        ctx.fillText('Press Space to start', 200, 400);
-        ctx.fillText('You reached level : ' + level, 200, 200);
-        if (inputStates.SPACE) {
+        if (level >= 0) ctx.fillText('You reached level : ' + (level + 1), 250, 200);
+        ctx.fillText('Click the MOUSE or SPACE to start', 100, 350);
+        if (inputStates.mouseclick || inputStates.SPACE) {
             level = 0;
             playBackgroundMusic();
             startgame(level);
+            inputStates.mouseclick = false;
+            inputStates.SPACE = false;
+        }
+    }
+
+    //CONGRATULATIONS
+    if (playing == 2) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = "50px Arial";
+        ctx.fillText('You have beaten level : ' + level, 240, 100);
+        ctx.fillText('Congratulation, you defeated the game!', 70, 200);
+        ctx.fillText('Click the MOUSE or SPACE', 200, 400);
+        ctx.fillText('to go back to main menu', 250, 500);
+        if (inputStates.mouseclick || inputStates.SPACE) {
+            playing = 0;
+            inputStates.mouseclick = false;
             inputStates.SPACE = false;
         }
     }
 
     //IN GAME
     if (playing == 1) {
-        // 1) On efface l'Ã©cran
+        // 1) On efface l'ecran
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         //Image de fond
@@ -314,6 +342,9 @@ function anime() {
             level += 1;
             startgame(level);
         }
+
+        ctx.font = "30px Arial";
+        ctx.fillText("level: " + level, 10, 30);
     }
 
     // On demande une nouvelle frame d'animation

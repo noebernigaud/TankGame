@@ -25,12 +25,12 @@ export default class Intelligence {
         this.char.angle = Math.atan2(dy, dx);
 
         //vérifie qu'il n'y a pas de murs entre lui et sa cible, le cas echeant cherche un autre angle permettant de toucher sa cible
-        this.simulatedBullet = new SimBullet(this.char, 1, 8, char1);
+        this.simulatedBullet = new SimBullet(this.char, 1, 6, char1);
         if(this.simulatedBullet.collTarget === false){
             let foundAngle = 0;
-            for(var i = -3.15; i<3.16; i += 0.15){
+            for(var i = -3.15; i<3.16; i += 0.20){
                 this.char.angle = i;
-                this.simulatedBullet = new SimBullet(this.char, 1, 8, char1);
+                this.simulatedBullet = new SimBullet(this.char, 1, 6, char1);
                 if(this.simulatedBullet.collTarget === true){
                     foundAngle = 1;
                     break;
