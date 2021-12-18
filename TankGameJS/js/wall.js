@@ -24,7 +24,6 @@ export default class Wall {
 
     destroy() {
         if (this.destructable === true) {
-            console.log("destroying a wall!")
             let position = walls.indexOf(this);
             walls.splice(position, 1);
         }
@@ -50,11 +49,8 @@ export default class Wall {
     }
 
     noWallBottom() {
-        console.log("let's see if there is a wall on the bottom of this wall")
         for (let otherWall of walls) {
-            console.log("checking if selected wall is on the bottom of this wall")
             if (collB(this.x + 10, this.y, this.sizex - 20, this.sizey, otherWall.x, otherWall.y, otherWall.sizex, otherWall.sizey)) {
-                console.log("there is a wall on the bottom of this wall!");
                 return false;
             }
         }

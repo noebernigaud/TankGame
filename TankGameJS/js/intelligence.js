@@ -28,7 +28,7 @@ export default class Intelligence {
         this.simulatedBullet = new SimBullet(this.char, 1, 8, char1);
         if(this.simulatedBullet.collTarget === false){
             let foundAngle = 0;
-            for(var i = -3.15; i<3.16; i += 0.20){
+            for(var i = -3.15; i<3.16; i += 0.15){
                 this.char.angle = i;
                 this.simulatedBullet = new SimBullet(this.char, 1, 8, char1);
                 if(this.simulatedBullet.collTarget === true){

@@ -181,7 +181,7 @@ function startgame(level) {
 
             char1 = new Char(150, height - 150, 0, 1, 1000, tankImage);
             charsAI = [
-                new Char(width - 150, 150, 0, 0.7, 20000000000, tankImageRed)];
+                new Char(width - 150, 150, 0, 0.7, 2000, tankImageRed)];
             chars = charsAI.slice();
             chars.push(char1);
 
