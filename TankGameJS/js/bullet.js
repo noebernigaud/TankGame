@@ -43,21 +43,21 @@ export default class Bullet {
                 this.angle = Math.atan2(Math.sin(this.angle), -Math.cos(this.angle));
             }
             //si un collision à droite
-            if (collR(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey)
+            else if (collR(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey)
                 && (wall.noWallLeft())
                 && (Math.cos(this.angle) < 0)) {
                 collisionHappened = 1;
                 this.angle = Math.atan2(Math.sin(this.angle), -Math.cos(this.angle));
             }
             //si un collision en haut
-            if (collT(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey)
+            else if (collT(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey)
                 && (wall.noWallBottom())
                 && (Math.sin(this.angle) > 0)) {
                 collisionHappened = 1;
                 this.angle = Math.atan2(-Math.sin(this.angle), Math.cos(this.angle));
             }
             //si un collision en bas
-            if (collB(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey)
+            else if (collB(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey)
                 && (wall.noWallTop())
                 && (Math.sin(this.angle) < 0)) {
                 collisionHappened = 1;

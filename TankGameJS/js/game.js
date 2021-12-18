@@ -159,8 +159,6 @@ function stopgame() {
 
 function startgame(level) {
 
-    level = 4;
-
     playing = 1;
 
     switch (level) {
@@ -344,7 +342,7 @@ function anime() {
     if (playing == 0) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.font = "50px Arial";
-        if (level >= 0) ctx.fillText('You reached level : ' + (level + 1), 250, 200);
+        if (level >= 0) ctx.fillText('You reached level : ' + Math.min((level + 1), 5), 250, 200);
         ctx.fillText('Click the MOUSE or SPACE to start', 100, 350);
         if (inputStates.mouseclick || inputStates.SPACE) {
             level = 0;
@@ -360,12 +358,11 @@ function anime() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.font = "50px Arial";
         ctx.fillText('You have beaten level : ' + level, 240, 100);
-        ctx.fillText('Congratulation, you defeated the game!', 70, 200);
+        ctx.fillText('Congratulations, you defeated the game!', 70, 200);
         ctx.fillText('Press SPACE', 340, 400);
         ctx.fillText('to go back to main menu', 250, 500);
-        if (inputStates.mouseclick || inputStates.SPACE) {
+        if (inputStates.SPACE) {
             playing = 0;
-            inputStates.mouseclick = false;
             inputStates.SPACE = false;
         }
     }
@@ -423,7 +420,7 @@ function anime() {
         }
 
         ctx.font = "30px Arial";
-        ctx.fillText("level: " + level + "/5", 10, 30);
+        ctx.fillText("level: " + (level+1) + "/5", 10, 30);
     }
 
     // On demande une nouvelle frame d'animation
