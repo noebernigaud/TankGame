@@ -159,7 +159,7 @@ function stopgame() {
 
 function startgame(level) {
 
-    level = 2;
+    level = 4;
 
     playing = 1;
 
@@ -167,7 +167,7 @@ function startgame(level) {
 
         /////////////////////////////////////// LEVEL 1
         case (0): {
-            char1 = new Char(200, height / 2, 0, 1, 1000, tankImage);
+            char1 = new Char(200, height / 2, 0, 1.4, 800, tankImage);
             charsAI = [new Char(850, height / 2, 0, 0, 1500, tankImageGreen)];
             chars = charsAI.slice();
             chars.push(char1);
@@ -188,8 +188,8 @@ function startgame(level) {
         /////////////////////////////////////// LEVEL 2
         case (1): {
 
-            char1 = new Char(150, height - 150, 0, 1, 1000, tankImage);
-            charsAI = [new Char(width - 150, 150, 0, 1, 1500, tankImageRed)];
+            char1 = new Char(150, height - 150, 0, 1.4, 800, tankImage);
+            charsAI = [new Char(width - 150, 150, 0, 1.2, 1500, tankImageRed)];
             chars = charsAI.slice();
             chars.push(char1);
 
@@ -212,11 +212,11 @@ function startgame(level) {
         /////////////////////////////////////// LEVEL 3
         case (2): {
 
-            char1 = new Char(100, height/2, 0, 1, 1000, tankImage);
+            char1 = new Char(100, height / 2, 0, 1.4, 800, tankImage);
             charsAI = [
-                new Char(250, 60, 0, 1, 1500, tankImageRed),
-                new Char(width-250, height-60, 0, 1, 1500, tankImageRed),
-                new Char(width-100, height/2, 0, 0, 1500, tankImageGreen)];
+                new Char(250, 60, 0, 1.2, 1500, tankImageRed),
+                new Char(width - 250, height - 60, 0, 1.2, 1500, tankImageRed),
+                new Char(width - 100, height / 2, 0, 0, 1500, tankImageGreen)];
             chars = charsAI.slice();
             chars.push(char1);
 
@@ -235,7 +235,63 @@ function startgame(level) {
             }
 
             holes = new Array();
-            
+
+            break;
+        }
+        /////////////////////////////////////// LEVEL 4
+        case (3): {
+
+            char1 = new Char(150, height - 100, 0, 1.4, 800, tankImage);
+            charsAI = [
+                new Char(width - 150, 100, 0, 1.2, 3000, tankImageRed),
+                new Char(width / 2, height / 2, 0, 1.2, 2800, tankImageRed),
+                new Char(width - 150, height / 2, 0, 0, 2500, tankImageGreen),
+                new Char(width / 2, 100, 0, 0, 2400, tankImageGreen)];
+            chars = charsAI.slice();
+            chars.push(char1);
+
+            walls = new Array();
+
+            holes = new Array();
+            for (var i = 0; i < (width - 80) / 30; i++) {
+                if (i < 7 || i > 12) {
+                    holes.push(new Hole(30 + 30 * i, height / 3));
+                    holes.push(new Hole(width - 60 - 30 * i, 2 * (height / 3) - 30));
+                }
+            }
+            for (var i = 0; i < (height - 80) / 30; i++) {
+                if (i < 3 || i > 8) {
+                    holes.push(new Hole(width / 3, height - 60 - 30 * i));
+                    holes.push(new Hole(2 * (width / 3) - 30, 30 + 30 * i));
+                }
+            }
+
+            break;
+        }
+        /////////////////////////////////////// LEVEL 4
+        case (4): {
+
+            char1 = new Char(150, height - 150, 0, 1.4, 800, tankImage);
+            charsAI = [
+                new Char(300, 200, 0, 2, 1500, tankImageBlue),
+                new Char(width - 150, 100, 0, 2, 1500, tankImageBlue),
+                new Char(width - 150, height - 100, 0, 2, 1500, tankImageBlue)];
+            chars = charsAI.slice();
+            chars.push(char1);
+
+            walls = new Array();
+            for (var i = 1; i < 5; i++) {
+                for (var j = 1; j < 5; j++){
+                    walls.push(new Wall(i * (width / 5), 60 + (j * 40) + 240 * ((i+1) % 2)));
+                    if(i==1) walls.push(new Wall(i * (width / 5) + j * 40, 100 + 240 * (i % 2)));
+                    if(i==3) walls.push(new Wall(i * (width / 5) + j * 40, 220 + 240 * (i % 2)));
+                    if(i==2) walls.push(new Wall(i * (width / 5) - j * 40, 100 + 240 * (i % 2)));
+                    if(i==4) walls.push(new Wall(i * (width / 5) - j * 40, 220 + 240 * (i % 2)));
+                }
+            }
+
+            holes = new Array();
+
             break;
         }
         /////////////////////////////////////// LAST LEVEL WON
@@ -305,7 +361,7 @@ function anime() {
         ctx.font = "50px Arial";
         ctx.fillText('You have beaten level : ' + level, 240, 100);
         ctx.fillText('Congratulation, you defeated the game!', 70, 200);
-        ctx.fillText('Click the MOUSE or SPACE', 200, 400);
+        ctx.fillText('Press SPACE', 340, 400);
         ctx.fillText('to go back to main menu', 250, 500);
         if (inputStates.mouseclick || inputStates.SPACE) {
             playing = 0;
@@ -367,7 +423,7 @@ function anime() {
         }
 
         ctx.font = "30px Arial";
-        ctx.fillText("level: " + level, 10, 30);
+        ctx.fillText("level: " + level + "/5", 10, 30);
     }
 
     // On demande une nouvelle frame d'animation

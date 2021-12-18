@@ -119,7 +119,7 @@ export default class Char {
       let startposx = this.x - 40 * Math.cos(this.angle);
       let startposy = this.y - 40 * Math.sin(this.angle);
       if (walls.every(wall => !this.isInto(startposx, startposy, wall.x, wall.y, wall.sizex, wall.sizey))) {
-        bullets.push(new Bullet(this, 1, 6));
+        bullets.push(new Bullet(this, 1, 5));
         bulletFiredSound.play();
         // on mémorise le dernier temps.
         this.lastBulletTime = time;
