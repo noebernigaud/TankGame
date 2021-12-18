@@ -7,7 +7,7 @@ When you kill all the ennemy tanks in a level, you can proceed to the next level
 **DONE**
 
 - Change the controls for the tank's movement so we can fire and move in 2 different directions. We now use ZQSD to move.
-- Create walls,destructable walls, holes.
+- Create walls, destructable walls, holes.
 - Collision between bullets and walls.
 - Collision tank/tank, bullet/bullet, bullet/tank.
 - Bullets have a set number of lifes and bounce off on walls using those lifes.
