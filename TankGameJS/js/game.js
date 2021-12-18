@@ -159,22 +159,20 @@ function stopgame() {
 
 function startgame(level) {
 
+    level = 2;
+
     playing = 1;
 
-    // LEVEL 1
     switch (level) {
 
+        /////////////////////////////////////// LEVEL 1
         case (0): {
             char1 = new Char(200, height / 2, 0, 1, 1000, tankImage);
-            charsAI = [
-                new Char(850, height / 2, 0, 0, 1000, tankImageGreen)];
+            charsAI = [new Char(850, height / 2, 0, 0, 1500, tankImageGreen)];
             chars = charsAI.slice();
             chars.push(char1);
 
-            //INITIALIZING WALLS AND HOLES
-
             walls = new Array();
-
             for (var i = 0; i < 6; i++) {
                 if (i < 2 || i > 3) {
                     walls.push(new Wall(width / 2 + 40, height / 2 - 120 + 40 * i, false));
@@ -184,24 +182,18 @@ function startgame(level) {
             }
 
             holes = new Array();
+
             break;
         }
+        /////////////////////////////////////// LEVEL 2
         case (1): {
 
             char1 = new Char(150, height - 150, 0, 1, 1000, tankImage);
-            charsAI = [
-                new Char(width - 150, 150, 0, 0.7, 2000, tankImageRed)];
+            charsAI = [new Char(width - 150, 150, 0, 1, 1500, tankImageRed)];
             chars = charsAI.slice();
             chars.push(char1);
 
-            bullets = new Array();
-
-            mines = new Array();
-
-            //INITIALIZING WALLS AND HOLES
-
             walls = new Array();
-
             for (var i = 0; i < 12; i++) {
                 if (i < 8) {
                     walls.push(new Wall(180 + 40 + 40 * i, 200, false));
@@ -214,8 +206,39 @@ function startgame(level) {
             }
 
             holes = new Array();
+
             break;
         }
+        /////////////////////////////////////// LEVEL 3
+        case (2): {
+
+            char1 = new Char(100, height/2, 0, 1, 1000, tankImage);
+            charsAI = [
+                new Char(250, 60, 0, 1, 1500, tankImageRed),
+                new Char(width-250, height-60, 0, 1, 1500, tankImageRed),
+                new Char(width-100, height/2, 0, 0, 1500, tankImageGreen)];
+            chars = charsAI.slice();
+            chars.push(char1);
+
+            walls = new Array();
+            for (var i = 0; i < 8; i++) {
+                if (i < 2) {
+                    walls.push(new Wall(140 + 40 * i, 100, false));
+                    walls.push(new Wall(width - 180 - 40 * i, height - 140, false));
+                }
+                else {
+                    walls.push(new Wall(140 + 40 * i, 100, true));
+                    walls.push(new Wall(width - 180 - 40 * i, height - 140, true));
+                    walls.push(new Wall(460, 20 + i * 40, false));
+                    walls.push(new Wall(width - 500, height - 60 - i * 40, false));
+                }
+            }
+
+            holes = new Array();
+            
+            break;
+        }
+        /////////////////////////////////////// LAST LEVEL WON
         default: {
             playing = 2;
             pausebackgroundMusic();

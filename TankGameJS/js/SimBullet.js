@@ -35,22 +35,30 @@ export default class SimBullet {
             let collisionHappened = 0;
 
             //si un collision à gauche
-            if (collL(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey) && (Math.cos(this.angle) > 0)) {
+            if (collL(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey)
+                && (wall.noWallRight())
+                && (Math.cos(this.angle) > 0)) {
                 collisionHappened = 1;
                 this.angle = Math.atan2(Math.sin(this.angle), -Math.cos(this.angle));
             }
             //si un collision à droite
-            if (collR(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey) && (Math.cos(this.angle) < 0)) {
+            if (collR(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey)
+                && (wall.noWallLeft())
+                && (Math.cos(this.angle) < 0)) {
                 collisionHappened = 1;
                 this.angle = Math.atan2(Math.sin(this.angle), -Math.cos(this.angle));
             }
             //si un collision en haut
-            if (collT(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey) && (Math.sin(this.angle) > 0)) {
+            if (collT(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey)
+                && (wall.noWallBottom())
+                && (Math.sin(this.angle) > 0)) {
                 collisionHappened = 1;
                 this.angle = Math.atan2(-Math.sin(this.angle), Math.cos(this.angle));
             }
             //si un collision en bas
-            if (collB(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey) && (Math.sin(this.angle) < 0)) {
+            if (collB(this.x - 5, this.y - 5, 10, 10, wall.x, wall.y, wall.sizex, wall.sizey)
+                && (wall.noWallTop())
+                && (Math.sin(this.angle) < 0)) {
                 collisionHappened = 1;
                 this.angle = Math.atan2(-Math.sin(this.angle), Math.cos(this.angle));
             }
