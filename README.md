@@ -18,10 +18,10 @@ When you kill all the ennemy tanks in a level, you can proceed to the next level
 - Images (tanks, walls destructable/not, bullets, background, mines).
 - Background music.
 - Sounds (fire bullets, bullet's bounce, bullet explosion, tank explosion, put mine, applause).
-- Implement different types of ennemies (green tanks are immobile, red tanks are mobile, blue tanks are fast and have a shorter reloading time).
+- Implement different types of enemies (green tanks are immobile, red tanks are mobile, blue tanks are fast and have a shorter reloading time).
 - Implements different levels.
 
 **IMPORTANTE NOTE**
 
-Once downloaded the html file need to be opened with a live server, else access to scripts will be bocked by the CORS policy.
+Once downloaded the html file needs to be opened with a live server, else access to scripts will be bocked by the CORS policy.
 
