@@ -13,12 +13,12 @@ Tank game similar to the Wii tank game coded in Javascript for a university proj
 - Ennemies AI.
 - Mines
 - Images (tanks, walls destructable/not, bullets, background, mines)
+- Background music
+- Sounds (fire bullets, bullet's bounce, bullet explosion, tank explosion)
 - Implement different types of ennemies
 
 **TODO**
 
-- Background music
-- Sounds (fire bullets, bullet's bounce, bullet explosion, tank explosion, tank movement)
 - Implements different levels
 - Menu and Highscores
 - Level editor
