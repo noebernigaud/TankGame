@@ -1,4 +1,4 @@
-import { walls, bullets, chars, bulletImage } from './game.js';
+import { walls, bullets, chars, bulletImage, bulletBounceSound, bulletDestroyedSound } from './game.js';
 import { collR, collL, collB, collT, coll } from './utils.js';
 
 export default class Bullet {
@@ -34,7 +34,7 @@ export default class Bullet {
         // entraine le rebond de la balle et la perte d'une de ses vies
         // TODO le mur perd une vie si il est destructible.
 
-        walls.forEach(wall => {
+        for (let wall of walls) {
 
             let collisionHappened = 0;
 
@@ -62,9 +62,11 @@ export default class Bullet {
             //si une collision a eu lieu, la balle perd une vie et le mur se destruit (si il est destructible)
             if (collisionHappened == 1) {
                 this.live--;
+                if (this.live >= 0) { bulletBounceSound.play(); }
                 wall.destroy();
+                break;
             }
-        })
+        }
 
         //FONCTIONS DE COLLISIONS ENTRE BALLES
         bullets.forEach(bullet => {
@@ -91,6 +93,7 @@ export default class Bullet {
     }
 
     removeBullet() {
+        bulletDestroyedSound.play();
         let position = bullets.indexOf(this);
         bullets.splice(position, 1);
     }

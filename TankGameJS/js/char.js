@@ -1,7 +1,7 @@
 import { distance, getMousePos, collR, collL, collB, collT, coll } from './utils.js'
 import Bullet from './bullet.js';
 import Mine from './mine.js';
-import { bullets, chars, charsAI, walls, mines, holes, char1, stopgame} from './game.js';
+import { bullets, chars, charsAI, walls, mines, holes, char1, stopgame, bulletFiredSound, explosionSound, minePlacedSound} from './game.js';
 import Intelligence from './intelligence.js';
 
 export default class Char {
@@ -117,7 +117,7 @@ export default class Char {
 
     if ((this.lastBulletTime === undefined) || (tempEcoule > this.delayMinBetweenBullets)) {
       bullets.push(new Bullet(this, 1, 8));
-      console.log("char " + this + "fired!");
+      bulletFiredSound.play();
       // on mémorise le dernier temps.
       this.lastBulletTime = time;
     }
@@ -131,8 +131,8 @@ export default class Char {
     }
 
     if ((this.lastMineTime === undefined) || (tempEcouleMine > this.delayMinBetweenMines)) {
+      minePlacedSound.play();
       mines.push(new Mine(this));
-      console.log("char " + this + "created a mine!");
       // on mémorise le dernier temps.
       this.lastMineTime = time;
     }
@@ -141,9 +141,10 @@ export default class Char {
   }
 
   removeChar() {
-    console.log("char destroyed");
     let position = chars.indexOf(this);
     chars.splice(position, 1);
+    explosionSound.play();
+    console.log("explosion sound has been played!")
     if (this === char1) {
       stopgame();
     }

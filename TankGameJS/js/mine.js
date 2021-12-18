@@ -1,4 +1,4 @@
-import {chars, mines, mineImage} from './game.js';
+import {chars, mines, mineImage, bullets} from './game.js';
 import {coll} from './utils.js';
 
 export default class Mine {

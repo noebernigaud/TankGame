@@ -2,7 +2,9 @@ import Char from './char.js';
 import Hole from './hole.js';
 import { getMousePos } from './utils.js'
 import Wall from './wall.js';
-export { walls, holes, bullets, mines, chars, charsAI, char1, stopgame, wallTexture, wallDTexture, holeImage, tankImage, bulletImage, mineImage };
+export { walls, holes, bullets, mines, chars, charsAI, char1, stopgame};
+export { wallTexture, wallDTexture, holeImage, tankImage, bulletImage, mineImage };
+export {bulletFiredSound, explosionSound, bulletBounceSound, bulletDestroyedSound, minePlacedSound};
 
 var canvas, ctx, width, height;
 var char1;
@@ -37,6 +39,12 @@ tankImageBlue.src = './images/tankBlue.png';
 var tankImageGreen = new Image();
 tankImageGreen.src = './images/tankGreen.png';
 
+let bulletFiredSound;
+let explosionSound;
+let bulletBounceSound;
+let bulletDestroyedSound;
+let minePlacedSound;
+
 
 var bulletImage = new Image();
 bulletImage.src = './images/bullet.png';
@@ -44,11 +52,12 @@ bulletImage.src = './images/bullet.png';
 var mineImage = new Image();
 mineImage.src = './images/minemine.png';
 
-window.onload = init;
+window.onload = init();
 
 // INITIALISATION
 
 function init() {
+
     canvas = document.querySelector("#myCanvas");
     ctx = canvas.getContext('2d');
     width = canvas.width;
@@ -57,6 +66,29 @@ function init() {
     playing = 0;
 
     level = 0;
+
+    explosionSound = new Howl({
+        urls: ['http://schaeffer.ludo.free.fr/worms/DATA/Wav/Effects/Explosion2.wav'],
+        volume: 0.2
+    });
+
+    bulletFiredSound = new Howl({
+        urls: ['https://rpg.hamsterrepublic.com/wiki-images/d/db/Crush8-Bit.ogg'],
+        volume: 0.5
+    });
+
+    bulletBounceSound = new Howl({
+        urls: ['https://mainline.i3s.unice.fr/mooc/SkywardBound/assets/sounds/plop.mp3']
+    });
+
+    bulletDestroyedSound = new Howl({
+        urls: ['http://commondatastorage.googleapis.com/codeskulptor-assets/Collision8-Bit.ogg']
+    });
+
+    minePlacedSound = new Howl({
+        urls: ['http://www.utc.fr/si28/ProjetsUpload/P2006_si28p004/flash_puzzle/sons/rush/mineplace.wav']
+    });
+    
 
     canvas.addEventListener('mousemove', (evt) => {
         mousepos = getMousePos(canvas, evt);
@@ -112,6 +144,7 @@ function init() {
 //GAME OVER GO TO MENU
 
 function stopgame() {
+    pausebackgroundMusic();
     playing = 0;
 }
 
@@ -121,6 +154,7 @@ function startgame(level) {
 
     // LEVEL 1
     switch (level) {
+
         case (0): {
             char1 = new Char(200, height/2, 0, 1, 1000, tankImage);
             charsAI = [
@@ -144,9 +178,10 @@ function startgame(level) {
             break;
         }
         default: {
+
             char1 = new Char(150, height - 150, 0, 1, 1000, tankImage);
             charsAI = [
-                new Char(width - 150, 150, 0, 0.7, 2000, tankImageRed)];
+                new Char(width - 150, 150, 0, 0.7, 20000000000, tankImageRed)];
             chars = charsAI.slice();
             chars.push(char1);
 
@@ -196,6 +231,20 @@ function startgame(level) {
     playing = 1;
 }
 
+//BACKGROUND MUSIC
+
+function playBackgroundMusic() {
+    let audioPlayer = document.querySelector("#audioPlayer");
+    audioPlayer.loop = true;
+    audioPlayer.play();
+ }
+
+ function pausebackgroundMusic() {
+    let audioPlayer = document.querySelector("#audioPlayer");
+    audioPlayer.pause(); 
+    audioPlayer.currentTime = 0; 
+ }
+
 //ANIMATION
 
 function anime() {
@@ -208,6 +257,7 @@ function anime() {
         ctx.fillText('You reached level : ' + level, 200, 200);
         if (inputStates.SPACE) {
             level = 0;
+            playBackgroundMusic();
             startgame(level);
             inputStates.SPACE = false;
         }

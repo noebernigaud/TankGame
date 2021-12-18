@@ -30,7 +30,7 @@ export default class SimBullet {
         // FONCTIONS DE COLLISION AVEC LES MURS
         // entraine le rebond de la balle et la perte d'une de ses vies
 
-        walls.forEach(wall => {
+        for (let wall of walls){
 
             let collisionHappened = 0;
 
@@ -59,8 +59,9 @@ export default class SimBullet {
             if (collisionHappened == 1) {
                 this.live--;
                 this.collWall = true;
+                break;
             }
-        })
+        }
 
         //FONCTONS DE COLLISIONS AVEC UN CHAR
 

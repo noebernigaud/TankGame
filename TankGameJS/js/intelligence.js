@@ -48,7 +48,6 @@ export default class Intelligence {
         }
 
         if ((this.lastUpdateDirection === undefined) || (tempEcoule > this.delayUpdateDirection)) {
-            console.log("char " + this + "updated direction!");
             // on mémorise le dernier temps.
             this.lastUpdateDirection = time;
             this.direction = Math.round(Math.random()*3);
