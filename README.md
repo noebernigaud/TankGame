@@ -3,6 +3,7 @@ Tank game similar to the Wii tank game coded in Javascript for a university proj
 Every tank have a single life, and they lose it by getting hit by a bullet. Friendly fire is allowed. Bullets bounce once on walls before dying themselves at the next collision. A bullet can destroy another bullet.
 You and your opponent will be separated by walls. Some are destroyable, and have a grey image. There are also holes, which you can't move over, but bullets do fly over them.
 When you kill all the ennemy tanks in a level, you can proceed to the next level, until you have beaten all 5 levels. If you get killed, you start back from the beginning.
+You can ajust your char's speed or change its reload time with the inputs below the game. The game's default difficulty is conceived to be challenging and rewarding, but feel free to create your own experience using those parameters.
 
 **DONE**
 
@@ -20,6 +21,7 @@ When you kill all the ennemy tanks in a level, you can proceed to the next level
 - Sounds (fire bullets, bullet's bounce, bullet explosion, tank explosion, put mine, applause).
 - Implement different types of enemies (green tanks are immobile, red tanks are mobile, blue tanks are fast and have a shorter reloading time).
 - Implements different levels.
+- Inputs below the canvas to adjust the speed and reloading time of the played tank.
 
 **IMPORTANTE NOTE**
 
