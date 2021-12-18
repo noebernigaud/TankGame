@@ -18,6 +18,8 @@ var mousepos = { x: 0, y: 0 };
 var inputStates = {};
 var playing;
 var level;
+var speedMultUti = 1;
+var reloadMultUti = 1;
 
 var backgroundTexture = new Image();
 backgroundTexture.src = './images/woodTexture.jpg';
@@ -165,7 +167,7 @@ function startgame(level) {
 
         /////////////////////////////////////// LEVEL 1
         case (0): {
-            char1 = new Char(200, height / 2, 0, 1.4, 800, tankImage);
+            char1 = new Char(200, height / 2, 0, 1.4 * speedMultUti, 800 * reloadMultUti, tankImage);
             charsAI = [new Char(850, height / 2, 0, 0, 1500, tankImageGreen)];
             chars = charsAI.slice();
             chars.push(char1);
@@ -186,7 +188,7 @@ function startgame(level) {
         /////////////////////////////////////// LEVEL 2
         case (1): {
 
-            char1 = new Char(150, height - 150, 0, 1.4, 800, tankImage);
+            char1 = new Char(150, height - 150, 0, 1.4 * speedMultUti, 800 * reloadMultUti, tankImage);
             charsAI = [new Char(width - 150, 150, 0, 1.2, 1500, tankImageRed)];
             chars = charsAI.slice();
             chars.push(char1);
@@ -210,7 +212,7 @@ function startgame(level) {
         /////////////////////////////////////// LEVEL 3
         case (2): {
 
-            char1 = new Char(100, height / 2, 0, 1.4, 800, tankImage);
+            char1 = new Char(100, height / 2, 0, 1.4 * speedMultUti, 800 * reloadMultUti, tankImage);
             charsAI = [
                 new Char(250, 60, 0, 1.2, 1500, tankImageRed),
                 new Char(width - 250, height - 60, 0, 1.2, 1500, tankImageRed),
@@ -239,7 +241,7 @@ function startgame(level) {
         /////////////////////////////////////// LEVEL 4
         case (3): {
 
-            char1 = new Char(150, height - 100, 0, 1.4, 800, tankImage);
+            char1 = new Char(150, height - 100, 0, 1.4 * speedMultUti, 800 * reloadMultUti, tankImage);
             charsAI = [
                 new Char(width - 150, 100, 0, 1.2, 3000, tankImageRed),
                 new Char(width / 2, height / 2, 0, 1.2, 2800, tankImageRed),
@@ -266,10 +268,10 @@ function startgame(level) {
 
             break;
         }
-        /////////////////////////////////////// LEVEL 4
+        /////////////////////////////////////// LEVEL 5
         case (4): {
 
-            char1 = new Char(150, height - 150, 0, 1.4, 800, tankImage);
+            char1 = new Char(150, height - 150, 0, 1.4 * speedMultUti, 800 * reloadMultUti, tankImage);
             charsAI = [
                 new Char(300, 200, 0, 2, 1500, tankImageBlue),
                 new Char(width - 150, 100, 0, 2, 1500, tankImageBlue),
@@ -428,6 +430,18 @@ function anime() {
 
 }
 
-function changeCadenceTir(value) {
-    char1.delayMinBetweenBullets = value;
+var inputVitMult = document.getElementById("mutlvit")
+inputVitMult.oninput = function() {changeVitesseChar(inputVitMult.value)};
+
+function changeVitesseChar(value) {
+    speedMultUti = value;
 }
+
+var inputReloadMult = document.getElementById("multReload")
+inputReloadMult.oninput = function() {changeCadenceTir(inputReloadMult.value)};
+
+function changeCadenceTir(value) {
+    reloadMultUti = value;
+}
+
+
