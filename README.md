@@ -1,22 +1,27 @@
 # TankGame
-Tank game similar to the Wii tank game coded in Javascript for a university project
+Tank game similar to the Wii tank game coded in Javascript for a university project. You are one lonely tank against an army, and will need to use great tactics to come out on top.
+Every tank have a single life, and they lose it by getting hit by a bullet. Friendly fire is allowed. Bullets bounce once on walls before dying themselves at the next collision. A bullet can destroy another bullet.
+You and your opponent will be separated by walls. Some are destroyable, and have a grey image. There are also holes, which you can't move over, but bullets do fly over them.
+When you kill all the ennemy tanks in a level, you can proceed to the next level, until you have beaten all 5 levels. If you get killed, you start back from the beginning.
 
 **DONE**
 
-- Change the controls for the tank's movement so we can fire and move in 2 different directions.
-- Create walls, setructable walls, holes.
+- Change the controls for the tank's movement so we can fire and move in 2 different directions. We now use ZQSD to move.
+- Create walls,destructable walls, holes.
 - Collision between bullets and walls.
 - Collision tank/tank, bullet/bullet, bullet/tank.
-- Bullets have a set number of lifes and bounce off on walls usin those lifes.
+- Bullets have a set number of lifes and bounce off on walls using those lifes.
 - Change cooldowns and speeds to make the game interesting.
 - Create ennemy tanks.
 - Ennemies AI.
-- Mines
-- Images (tanks, walls destructable/not, bullets, background, mines)
-- Background music
-- Sounds (fire bullets, bullet's bounce, bullet explosion, tank explosion)
-- Implement different types of ennemies
+- Mines.
+- Images (tanks, walls destructable/not, bullets, background, mines).
+- Background music.
+- Sounds (fire bullets, bullet's bounce, bullet explosion, tank explosion, put mine, applause).
+- Implement different types of ennemies (green tanks are immobile, red tanks are mobile, blue tanks are fast and have a shorter reloading time).
+- Implements different levels.
 
-**TODO**
+**IMPORTANTE NOTE**
 
-- Implements different levels
+Once downloaded the html file need to be opened with a live server, else access to scripts will be bocked by the CORS policy.
+
