@@ -1,3 +1,5 @@
+https://noebernigaud.github.io/TankGame/TankGameJS
+
 # TankGame
 Tank game similar to the Wii tank game coded in Javascript for a university project. You are one lonely tank against an army, and will need to use great tactics to come out on top.
 Every tank have a single life, and they lose it by getting hit by a bullet. Friendly fire is allowed. Bullets bounce once on walls before dying themselves at the next collision. A bullet can destroy another bullet.
